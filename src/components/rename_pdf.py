@@ -41,6 +41,10 @@ def _extract_name_from_text(text: str) -> Optional[str]:
             # Normalize whitespace and remove trailing punctuation
             name = re.sub(r"\s+", " ", name)
             name = name.strip(" ,.-")
+            # Remove gender suffixes like _Male, _Female, etc.
+            name = re.sub(r"_?(Gender|Age)$|(Mr|Ms)\.\s*", "", name, flags=re.IGNORECASE).strip()
+            print(name)
+            
             return name
 
     return None
@@ -135,7 +139,7 @@ def rename_reports(src_dir: Path, dst_dir: Path) -> None:
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Rename medical reports based on extracted patient name.")
     parser.add_argument("--src", default="hospital", help="Source folder containing PDFs.")
-    parser.add_argument("--dst", default="medical_new", help="Destination folder for renamed PDFs.")
+    parser.add_argument("--dst", default="hospital_new", help="Destination folder for renamed PDFs.")
     return parser.parse_args()
 
 
